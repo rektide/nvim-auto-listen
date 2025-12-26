@@ -1,7 +1,7 @@
 local M = {}
 
 local function check_plugin_loaded()
-  local ok, _ = pcall(require, "auto-listen.auto-listen")
+  local ok, _ = pcall(require, "auto-listen")
   if ok then
     vim.health.ok("auto-listen plugin loaded")
     return true
@@ -12,7 +12,7 @@ local function check_plugin_loaded()
 end
 
 local function check_server_status()
-  local ok, module = pcall(require, "auto-listen.auto-listen")
+  local ok, module = pcall(require, "auto-listen")
   if not ok then
     vim.health.info("Cannot check server status (module not loaded)")
     return
