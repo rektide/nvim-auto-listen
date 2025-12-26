@@ -2,6 +2,7 @@
 local M = {}
 
 local socket_path = ".nvim.socket"
+local created_socket = false
 
 local function server_already_running()
     -- Check if server is already listening
@@ -19,6 +20,26 @@ local function socket_exists()
     return stat ~= nil and stat.type == "socket"
 end
 
+local function cleanup_socket()
+  if created_socket and socket_exists() then
+    local ok, err = vim.loop.fs_unlink(socket_path)
+    if ok then
+      vim.notify("Cleaned up socket: " .. socket_path, vim.log.levels.INFO)
+    else
+      vim.notify("Failed to clean up socket: " .. (err or "unknown error"), vim.log.levels.WARN)
+    end
+  end
+end
+
+local function setup_autocmd()
+  local group = vim.api.nvim_create_augroup("AutoListenCleanup", { clear = true })
+  vim.api.nvim_create_autocmd("VimLeave", {
+    group = group,
+    callback = cleanup_socket,
+    desc = "Clean up socket file on exit",
+  })
+end
+
 function M.get_socket_path()
   return socket_path
 end
@@ -27,9 +48,12 @@ function M.setup(opts)
     opts = opts or {}
     socket_path = opts.socket or socket_path
 
+    setup_autocmd()
+
     if not server_already_running() and not socket_exists() then
         local address = vim.fn.serverstart(socket_path)
         if address then
+            created_socket = true
             vim.notify("Neovim server started on: " .. address, vim.log.levels.DEBUG)
         else
             vim.notify("Failed to start Neovim server", vim.log.levels.ERROR)
