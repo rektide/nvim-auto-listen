@@ -9,12 +9,18 @@ local function get_socket_path(opts)
     return opts.socket
   end
 
-  local cwd = vim.loop.cwd()
+  local base_dir
+  if opts.socket_xdg_runtime then
+    base_dir = vim.fn.stdpath("cache")
+  else
+    base_dir = vim.loop.cwd()
+  end
+
   local basename = "nvim"
 
   if opts.socket_named then
     if opts.socket_named == true then
-      local dirname = vim.fs.basename(cwd)
+      local dirname = vim.fs.basename(vim.loop.cwd())
       basename = "nvim." .. dirname
     elseif type(opts.socket_named) == "string" then
       basename = "nvim." .. opts.socket_named
@@ -24,7 +30,7 @@ local function get_socket_path(opts)
   local filename = opts.socket_hidden and ("." .. basename) or basename
   filename = filename .. ".socket"
 
-  return cwd .. "/" .. filename
+  return base_dir .. "/" .. filename
 end
 
 local function server_already_running()

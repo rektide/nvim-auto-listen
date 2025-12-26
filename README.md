@@ -22,7 +22,8 @@ You can customize the plugin behavior:
 
 ```lua
 require('auto-listen').setup({
-  socket = 'nvim.sock',       -- Custom socket path (optional)
+  socket = 'nvim.sock',         -- Custom socket path (optional)
+  socket_xdg_runtime = true,    -- Use XDG cache directory
   socket_named = true,           -- Use directory name in socket: .nvim.<dirname>.socket
   socket_hidden = false,          -- Create visible (non-hidden) socket file
   autorun = false,              -- Disable automatic server start
@@ -32,9 +33,11 @@ require('auto-listen').setup({
 ### Options
 
 - `socket`: Full path to the socket file. If not provided, socket is auto-generated.
+- `socket_xdg_runtime` (boolean, default: `false`): Use XDG cache directory (`vim.fn.stdpath("cache")`) instead of current working directory.
 - `socket_named` (boolean|string, default: `false`): Include name in socket filename.
   - If `true`: use current directory name (e.g., `.nvim.myproject.socket`)
   - If string: use that literal name (e.g., `.nvim.custom.socket`)
+  - Note: Always uses current working directory name, even with `socket_xdg_runtime = true`. This prevents socket conflicts between different projects.
 - `socket_hidden` (boolean, default: `true`): Create hidden socket file (with leading dot).
 - `autorun` (boolean, default: `true`): Automatically start server on Neovim startup.
 
