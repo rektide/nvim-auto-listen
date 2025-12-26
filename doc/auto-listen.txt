@@ -1,0 +1,82 @@
+*auto-listen.txt*  Automatically start a Neovim remote server
+
+Author:  Your Name <your@email.com>
+License: MIT License
+==============================================================================
+
+INTRODUCTION                                    *auto-listen*
+
+|auto-listen| automatically starts a Neovim remote server on a socket file in
+the current directory. This allows you to connect to the same Neovim instance from
+other terminal sessions.
+
+==============================================================================
+
+INSTALLATION                                      *auto-listen-installation*
+
+Using your favorite plugin manager:
+
+lazy.nvim: >
+    {
+        "your-username/auto-listen"
+    }
+<
+vim-plug: >
+    Plug 'your-username/auto-listen'
+<
+paq-nvim: >
+    require 'paq' {
+        'your-username/auto-listen';
+    }
+<
+
+==============================================================================
+
+USAGE                                            *auto-listen-usage*
+
+The plugin automatically starts a Neovim server when Neovim opens, creating a
+socket file in the current directory.
+
+Default socket path: `.nvim.socket`
+
+Connect to the server from another terminal: >
+
+    nvim --server .nvim.socket --remote-send ':echo "Hello"<CR>'
+<
+Or open a file in the existing instance: >
+    nvim --server .nvim.socket --remote file.txt
+<
+
+==============================================================================
+
+CONFIGURATION                                 *auto-listen-configuration*
+
+The plugin can be configured via the `setup()` function: >
+
+    require("auto-listen").setup({
+        socket = "nvim.sock"  -- Custom socket path
+    })
+<
+*auto-listen-config-socket*                      socket
+    Type: `string` (default: `.nvim.socket`)
+    The path for the server socket file.
+
+==============================================================================
+
+COMMANDS                                        *auto-listen-commands*
+
+*:checkhealth auto-listen*
+    Run health checks to verify the plugin status and server state.
+
+==============================================================================
+
+HEALTH                                           *auto-listen-health*
+
+Run `:checkhealth auto-listen` to verify:
+- Plugin is loaded correctly
+- Server is running on the configured socket
+- Socket file exists and is valid
+
+==============================================================================
+
+vim:tw=78:ts=8:ft=help:norl:
