@@ -4,6 +4,10 @@ local M = {}
 local socket_path = ".nvim.socket"
 local created_socket = false
 
+local function get_default_socket_path()
+  return vim.loop.cwd() .. "/.nvim.socket"
+end
+
 local function server_already_running()
     -- Check if server is already listening
     local servers = vim.fn.serverlist()
@@ -46,7 +50,7 @@ end
 
 function M.setup(opts)
     opts = opts or {}
-    socket_path = opts.socket or socket_path
+    socket_path = opts.socket or get_default_socket_path()
 
     setup_autocmd()
 
