@@ -4,8 +4,27 @@ local M = {}
 local socket_path = ".nvim.socket"
 local created_socket = false
 
-local function get_default_socket_path()
-  return vim.loop.cwd() .. "/.nvim.socket"
+local function get_socket_path(opts)
+  if opts.socket then
+    return opts.socket
+  end
+
+  local cwd = vim.loop.cwd()
+  local basename = "nvim"
+
+  if opts.socket_named then
+    if opts.socket_named == true then
+      local dirname = vim.fs.basename(cwd)
+      basename = "nvim." .. dirname
+    elseif type(opts.socket_named) == "string" then
+      basename = "nvim." .. opts.socket_named
+    end
+  end
+
+  local filename = opts.socket_hidden and ("." .. basename) or basename
+  filename = filename .. ".socket"
+
+  return cwd .. "/" .. filename
 end
 
 local function server_already_running()
@@ -50,11 +69,14 @@ end
 
 function M.setup(opts)
     opts = opts or {}
-    socket_path = opts.socket or get_default_socket_path()
+    opts.socket_hidden = opts.socket_hidden == nil and true or opts.socket_hidden
+    opts.autorun = opts.autorun == nil and true or opts.autorun
+
+    socket_path = get_socket_path(opts)
 
     setup_autocmd()
 
-    if not server_already_running() and not socket_exists() then
+    if opts.autorun and not server_already_running() and not socket_exists() then
         local address = vim.fn.serverstart(socket_path)
         if address then
             created_socket = true

@@ -18,15 +18,15 @@ Using your favorite plugin manager:
 
 lazy.nvim: >
     {
-        "your-username/auto-listen"
+        "rektide/nvim-auto-listen"
     }
 <
 vim-plug: >
-    Plug 'your-username/auto-listen'
+    Plug 'rektide/nvim-auto-listen'
 <
 paq-nvim: >
     require 'paq' {
-        'your-username/auto-listen';
+        'rektide/nvim-auto-listen';
     }
 <
 
@@ -35,15 +35,16 @@ paq-nvim: >
 USAGE                                            *auto-listen-usage*
 
 The plugin automatically starts a Neovim server when Neovim opens, creating a
-socket file in the current directory.
+socket file in the current working directory.
 
-Default socket path: `.nvim.socket`
+Default socket path: `{cwd}/.nvim.socket`
 
 Connect to the server from another terminal: >
 
     nvim --server .nvim.socket --remote-send ':echo "Hello"<CR>'
 <
 Or open a file in the existing instance: >
+
     nvim --server .nvim.socket --remote file.txt
 <
 
@@ -51,15 +52,37 @@ Or open a file in the existing instance: >
 
 CONFIGURATION                                 *auto-listen-configuration*
 
-The plugin can be configured via the `setup()` function: >
+The plugin can be configured via a `setup()` function: >
 
     require("auto-listen").setup({
-        socket = "nvim.sock"  -- Custom socket path
+        socket = "nvim.sock",         -- Custom socket path
+        socket_named = true,           -- Use directory name in socket file
+        socket_hidden = false,          -- Create visible (non-hidden) socket file
+        autorun = false,              -- Disable automatic server start
     })
 <
 *auto-listen-config-socket*                      socket
-    Type: `string` (default: `.nvim.socket`)
-    The path for the server socket file.
+    Type: `string` (default: `nil`, auto-generated)
+    Full path for the server socket file. If not provided, the socket name
+    is generated based on other options.
+
+*auto-listen-config-socket_named*           socket_named
+    Type: `boolean | string` (default: `false`)
+    If `true`, include current directory name in socket filename.
+    If a string, use that literal string instead of directory name.
+    Examples:
+    - In directory `myproject` with `socket_named = true`: `.nvim.myproject.socket`
+    - With `socket_named = "custom"`: `.nvim.custom.socket`
+
+*auto-listen-config-socket_hidden*          socket_hidden
+    Type: `boolean` (default: `true`)
+    If `true`, socket file is hidden (starts with a dot).
+    If `false`, socket file is visible.
+
+*auto-listen-config-autorun*                  autorun
+    Type: `boolean` (default: `true`)
+    If `true`, automatically start the server on Neovim startup.
+    If `false`, the plugin will not start the server automatically.
 
 ==============================================================================
 
