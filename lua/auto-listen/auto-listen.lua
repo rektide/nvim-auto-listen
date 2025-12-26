@@ -19,6 +19,10 @@ local function socket_exists()
     return stat ~= nil and stat.type == "socket"
 end
 
+function M.get_socket_path()
+  return socket_path
+end
+
 function M.setup(opts)
     opts = opts or {}
     socket_path = opts.socket or socket_path
