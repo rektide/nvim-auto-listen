@@ -116,11 +116,21 @@ Environment variables take precedence over `setup()` options for any explicitly 
 *auto-listen-env-NVIM_AUTO_SOCKET_PATH*       NVIM_AUTO_SOCKET_PATH
     Set to socket path directly (same as NVIM_AUTO_SOCKET).
 
-*auto-listen-env-NVIM_AUTO_SOCKET_PATH*       NVIM_AUTO_SOCKET_PATH
-    Set to socket path directly (same as NVIM_AUTO_SOCKET).
-
-*auto-listen-env-NVIM_AUTO_SOCKET_XDG_RUNTIME*  NVIM_AUTO_SOCKET_XDG_RUNTIME
+*auto-listen-env-NVIM_AUTO_LISTEN_XDG_RUNTIME*    NVIM_AUTO_LISTEN_XDG_RUNTIME
     Set to `true`, `1`, or `yes` to use XDG cache directory.
+
+*auto-listen-env-NVIM_AUTO_LISTEN_NAMED*   NVIM_AUTO_LISTEN_NAMED
+    Set to `true` to use directory name, or a custom string to use that name.
+
+*auto-listen-env-NVIM_AUTO_LISTEN_HIDDEN*  NVIM_AUTO_LISTEN_HIDDEN
+    Set to `true`, `1`, or `yes` to create hidden socket file.
+
+*auto-listen-env-NVIM_AUTO_LISTEN_AUTORUN*   NVIM_AUTO_LISTEN_AUTORUN
+    Set to `true`, `1`, or `yes` to enable automatic server start.
+
+*auto-listen-env-NVIM_AUTO_LISTEN_PROJECT_ROOT*  NVIM_AUTO_LISTEN_PROJECT_ROOT
+    Comma-separated list of filenames for project root detection.
+    Set to empty or unset to disable.
 
 *auto-listen-env-NVIM_AUTO_SOCKET_NAMED*   NVIM_AUTO_SOCKET_NAMED
     Set to `true` to use directory name, or a custom string to use that name.

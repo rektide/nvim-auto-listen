@@ -33,17 +33,14 @@ require('auto-listen').setup({
 
 ### Options
 
-- `socket`: Full path to the socket file. If not provided, socket is auto-generated.
-- `socket_xdg_runtime` (boolean, default: `false`): Use XDG cache directory (`vim.fn.stdpath("cache")`) instead of current working directory.
-- `socket_named` (boolean|string, default: `false`): Include name in socket filename.
-  - If `true`: use current directory name (e.g., `.nvim.myproject.socket`)
-  - If string: use that literal name (e.g., `.nvim.custom.socket`)
-  - Note: Always uses current working directory name, even with `socket_xdg_runtime = true`. This prevents socket conflicts between different projects.
-- `socket_hidden` (boolean, default: `true`): Create hidden socket file (with leading dot).
-- `project_root` (string[]|false|nil, default: `{"README.md", "package.json", "Cargo.toml", "pyproject.toml"}`): Array of filenames to search for when determining project root. When not using `socket_xdg_runtime`, the plugin recurses up from the current working directory until it finds a directory containing one of these files. Set to `false` to disable project root detection and use the current directory directly. Set to a custom array to override the default list. When `nil`, the default list is used.
-- `autorun` (boolean, default: `true`): Automatically start server on Neovim startup.
-- `NVIM_AUTO_SOCKET`: Set to socket path directly.
-- `NVIM_AUTO_SOCKET_PATH`: Set to socket path directly (same as NVIM_AUTO_SOCKET).
+| Option Name          | Default                                                         | Type                 | Description                                                                                                       | Env Var                         |
+| -------------------- | --------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `socket`             | auto-generated                                                  | string               | Full path to the socket file. If not provided, socket is auto-generated.                                          | `NVIM_AUTO_LISTEN_SOCKET`       |
+| `socket_xdg_runtime` | `false`                                                         | boolean              | Use XDG cache directory (`vim.fn.stdpath("cache")`) instead of current working directory.                         | `NVIM_AUTO_LISTEN_XDG_RUNTIME`  |
+| `socket_named`       | `false`                                                         | boolean\|string      | Include name in socket filename. If `true`: use current directory name. If string: use that literal name.         | `NVIM_AUTO_LISTEN_NAMED`        |
+| `socket_hidden`      | `true`                                                          | boolean              | Create hidden socket file (with leading dot).                                                                     | `NVIM_AUTO_LISTEN_HIDDEN`       |
+| `project_root`       | `{"README.md", "package.json", "Cargo.toml", "pyproject.toml"}` | string[]\|false\|nil | Array of filenames to search for when determining project root. Set to `false` to disable project root detection. | `NVIM_AUTO_LISTEN_PROJECT_ROOT` |
+| `autorun`            | `true`                                                          | boolean              | Automatically start server on Neovim startup.                                                                     | `NVIM_AUTO_LISTEN_AUTORUN`      |
 
 ## Socket Path Calculation
 

@@ -34,25 +34,25 @@ local function merge_with_env_vars(opts)
   end
 
   if result.socket_xdg_runtime == nil then
-    result.socket_xdg_runtime = parse_env_bool(vim.env.NVIM_AUTO_SOCKET_XDG_RUNTIME)
+    result.socket_xdg_runtime = parse_env_bool(vim.env.NVIM_AUTO_LISTEN_XDG_RUNTIME)
   end
 
   if result.socket_named == nil then
-    result.socket_named = vim.env.NVIM_AUTO_SOCKET_NAMED
+    result.socket_named = vim.env.NVIM_AUTO_LISTEN_NAMED
   end
 
   if result.socket_hidden == nil then
-    local env_val = vim.env.NVIM_AUTO_SOCKET_HIDDEN
+    local env_val = vim.env.NVIM_AUTO_LISTEN_HIDDEN
     result.socket_hidden = parse_env_bool(env_val) or true
   end
 
   if result.autorun == nil then
-    local env_val = vim.env.NVIM_AUTO_AUTORUN
+    local env_val = vim.env.NVIM_AUTO_LISTEN_AUTORUN
     result.autorun = parse_env_bool(env_val) or true
   end
 
   if result.project_root == nil then
-    local env_val = vim.env.NVIM_AUTO_PROJECT_ROOT
+    local env_val = vim.env.NVIM_AUTO_LISTEN_PROJECT_ROOT
     result.project_root = parse_env_array(env_val) or { "README.md", "package.json", "Cargo.toml", "pyproject.toml" }
   end
 
