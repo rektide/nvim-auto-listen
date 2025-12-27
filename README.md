@@ -65,10 +65,9 @@ flowchart LR
     START --> IS_SOCKET{socket?}
     IS_SOCKET -->|Yes| RETURN_SOCKET[return socket]
     IS_SOCKET -->|No| IS_NAMED{named?}
-    IS_NAMED -->|No| BASE_NAMED[base=nvim]
-    IS_NAMED -->|Yes| IS_TYPE{type?}
-    IS_TYPE -->|true| BASE_CWD[base=nvim.cwd]
-    IS_TYPE -->|string| BASE_CUSTOM[base=nvim.val]
+    IS_NAMED -->|false| BASE_NAMED[base=nvim]
+    IS_NAMED -->|true| BASE_CWD[base=nvim.cwd]
+    IS_NAMED -->|string| BASE_CUSTOM[base=nvim.val]
     BASE_NAMED --> IS_HIDDEN{hidden?}
     BASE_CWD --> IS_HIDDEN
     BASE_CUSTOM --> IS_HIDDEN
