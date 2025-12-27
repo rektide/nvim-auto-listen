@@ -41,6 +41,14 @@ require('auto-listen').setup({
 - `socket_hidden` (boolean, default: `true`): Create hidden socket file (with leading dot).
 - `autorun` (boolean, default: `true`): Automatically start server on Neovim startup.
 
+## Socket Path Calculation
+
+The socket file path is determined based on configuration options:
+
+| Directory Path                                                                        | Filename                                           |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------- | ------------------------------------------ | ---------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| ```mermaid<br/>flowchart LR<br/>START[START] --> IS_SOCKET{socket?}<br/>IS_SOCKET --o | --> RETURN_SOCKET[return socket]<br/>IS_SOCKET --x | --> IS_XDG{xdg?}<br/>IS_XDG --o | --> XDG_CACHE[base=xdg cache]<br/>IS_XDG --x | --> CWD[base=cwd]<br/>XDG_CACHE --> PATH_COMPLETE[complete path]<br/>CWD --> PATH_COMPLETE``` | ```mermaid<br/>flowchart LR<br/>START[START] --> IS_SOCKET{socket?}<br/>IS_SOCKET --o | --> RETURN_SOCKET[return socket]<br/>IS_SOCKET --x | --> IS_NAMED{named?}<br/>IS_NAMED --x | --> BASE_NAMED[base=nvim]<br/>IS_NAMED --o | --> IS_TYPE{type?}<br/>IS_TYPE --o | --> BASE_CWD[base=nvim.cwd]<br/>IS_TYPE --s | --> BASE_CUSTOM[base=nvim.val]<br/>BASE_NAMED --> IS_HIDDEN{hidden?}<br/>BASE_CWD --> IS_HIDDEN<br/>BASE_CUSTOM --> IS_HIDDEN<br/>IS_HIDDEN --o | --> ADD_DOT[file=.base.socket]<br/>IS_HIDDEN --x | --> NO_DOT[file=base.socket]<br/>ADD_DOT --> PATH_COMPLETE[complete path]<br/>NO_DOT --> PATH_COMPLETE<br/>PATH_COMPLETE --> RETURN_SOCKET``` |
+
 ## License
 
 MIT
