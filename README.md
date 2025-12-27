@@ -42,6 +42,8 @@ require('auto-listen').setup({
 - `socket_hidden` (boolean, default: `true`): Create hidden socket file (with leading dot).
 - `project_root` (string[]|false|nil, default: `{"README.md", "package.json", "Cargo.toml", "pyproject.toml"}`): Array of filenames to search for when determining project root. When not using `socket_xdg_runtime`, the plugin recurses up from the current working directory until it finds a directory containing one of these files. Set to `false` to disable project root detection and use the current directory directly. Set to a custom array to override the default list. When `nil`, the default list is used.
 - `autorun` (boolean, default: `true`): Automatically start server on Neovim startup.
+- `NVIM_AUTO_SOCKET`: Set to socket path directly.
+- `NVIM_AUTO_SOCKET_PATH`: Set to socket path directly (same as NVIM_AUTO_SOCKET).
 
 ## Socket Path Calculation
 

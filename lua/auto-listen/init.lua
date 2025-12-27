@@ -4,6 +4,61 @@ local M = {}
 local socket_path = ".nvim.socket"
 local created_socket = false
 
+local function parse_env_bool(value)
+  if not value then
+    return nil
+  end
+  value = value:lower()
+  return value == "1" or value == "true" or value == "yes"
+end
+
+local function parse_env_array(value)
+  if not value then
+    return nil
+  end
+  if value == "" then
+    return {}
+  end
+  local result = {}
+  for item in value:gmatch("[^,]+") do
+    table.insert(result, vim.trim(item))
+  end
+  return result
+end
+
+local function merge_with_env_vars(opts)
+  local result = vim.deepcopy(opts or {})
+
+  if result.socket == nil then
+    result.socket = vim.env.NVIM_AUTO_SOCKET or vim.env.NVIM_AUTO_SOCKET_PATH
+  end
+
+  if result.socket_xdg_runtime == nil then
+    result.socket_xdg_runtime = parse_env_bool(vim.env.NVIM_AUTO_SOCKET_XDG_RUNTIME)
+  end
+
+  if result.socket_named == nil then
+    result.socket_named = vim.env.NVIM_AUTO_SOCKET_NAMED
+  end
+
+  if result.socket_hidden == nil then
+    local env_val = vim.env.NVIM_AUTO_SOCKET_HIDDEN
+    result.socket_hidden = parse_env_bool(env_val) or true
+  end
+
+  if result.autorun == nil then
+    local env_val = vim.env.NVIM_AUTO_AUTORUN
+    result.autorun = parse_env_bool(env_val) or true
+  end
+
+  if result.project_root == nil then
+    local env_val = vim.env.NVIM_AUTO_PROJECT_ROOT
+    result.project_root = parse_env_array(env_val) or { "README.md", "package.json", "Cargo.toml", "pyproject.toml" }
+  end
+
+  return result
+end
+
 local function find_project_root(opts)
   if not opts.project_root or #opts.project_root == 0 then
     return vim.loop.cwd()
@@ -102,12 +157,7 @@ function M.get_socket_path()
 end
 
 function M.setup(opts)
-    opts = opts or {}
-    opts.socket_hidden = opts.socket_hidden == nil and true or opts.socket_hidden
-    opts.autorun = opts.autorun == nil and true or opts.autorun
-    if opts.project_root == nil then
-      opts.project_root = { "README.md", "package.json", "Cargo.toml", "pyproject.toml" }
-    end
+    opts = merge_with_env_vars(opts or {})
 
     socket_path = get_socket_path(opts)
 
