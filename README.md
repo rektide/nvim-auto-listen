@@ -6,6 +6,8 @@
 
 Install this plugin in your Neovim configuration. When Neovim starts, it will automatically start a remote server on a `.nvim.socket` socket file in the current working directory if one doesn't already exist.
 
+This extension can be particularly helpful for making use of the [mcp-neovim-server](https://github.com/bigcodegen/mcp-neovim-server) MCP server. Setting `NVIM_SOCKET_PATH=.nvim.socket` will let a local editor access the local nvim session.
+
 ### Example Usage
 
 ```bash
