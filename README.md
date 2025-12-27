@@ -26,6 +26,7 @@ require('auto-listen').setup({
   socket_xdg_runtime = true,    -- Use XDG cache directory
   socket_named = true,           -- Use directory name in socket: .nvim.<dirname>.socket
   socket_hidden = false,          -- Create visible (non-hidden) socket file
+  project_root = false,          -- Disable project root detection
   autorun = false,              -- Disable automatic server start
 })
 ```
@@ -39,6 +40,7 @@ require('auto-listen').setup({
   - If string: use that literal name (e.g., `.nvim.custom.socket`)
   - Note: Always uses current working directory name, even with `socket_xdg_runtime = true`. This prevents socket conflicts between different projects.
 - `socket_hidden` (boolean, default: `true`): Create hidden socket file (with leading dot).
+- `project_root` (string[]|false|nil, default: `{"README.md", "package.json", "Cargo.toml", "pyproject.toml"}`): Array of filenames to search for when determining project root. When not using `socket_xdg_runtime`, the plugin recurses up from the current working directory until it finds a directory containing one of these files. Set to `false` to disable project root detection and use the current directory directly. Set to a custom array to override the default list. When `nil`, the default list is used.
 - `autorun` (boolean, default: `true`): Automatically start server on Neovim startup.
 
 ## Socket Path Calculation
@@ -53,9 +55,14 @@ flowchart LR
     IS_SOCKET -->|Yes| RETURN_SOCKET[return socket]
     IS_SOCKET -->|No| IS_XDG{xdg?}
     IS_XDG -->|Yes| XDG_CACHE[base=xdg cache]
-    IS_XDG -->|No| CWD[base=cwd]
+    IS_XDG -->|No| PROJ_ROOT{project_root?}
+    PROJ_ROOT -->|nil| CWD[base=cwd]
+    PROJ_ROOT -->|false| DISABLED[base=cwd<br/>feature disabled]
+    PROJ_ROOT -->|array| FIND_ROOT[find project root]
     XDG_CACHE --> PATH_COMPLETE
     CWD --> PATH_COMPLETE
+    DISABLED --> PATH_COMPLETE
+    FIND_ROOT --> PATH_COMPLETE
 ```
 
 ### Filename

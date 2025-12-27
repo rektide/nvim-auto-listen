@@ -4,6 +4,31 @@ local M = {}
 local socket_path = ".nvim.socket"
 local created_socket = false
 
+local function find_project_root(opts)
+  if not opts.project_root or #opts.project_root == 0 then
+    return vim.loop.cwd()
+  end
+
+  local dir = vim.loop.cwd()
+
+  while dir do
+    for _, file in ipairs(opts.project_root) do
+      local stat = vim.loop.fs_stat(dir .. "/" .. file)
+      if stat and stat.type == "file" then
+        return dir
+      end
+    end
+
+    local parent = vim.fs.dirname(dir)
+    if parent == dir then
+      break
+    end
+    dir = parent
+  end
+
+  return vim.loop.cwd()
+end
+
 local function get_socket_path(opts)
   if opts.socket then
     return opts.socket
@@ -13,7 +38,10 @@ local function get_socket_path(opts)
   if opts.socket_xdg_runtime then
     base_dir = vim.fn.stdpath("cache")
   else
-    base_dir = vim.loop.cwd()
+    base_dir = find_project_root(opts)
+    if base_dir ~= vim.loop.cwd() then
+      vim.notify("Using project root: " .. base_dir, vim.log.levels.INFO)
+    end
   end
 
   local basename = "nvim"
@@ -77,6 +105,9 @@ function M.setup(opts)
     opts = opts or {}
     opts.socket_hidden = opts.socket_hidden == nil and true or opts.socket_hidden
     opts.autorun = opts.autorun == nil and true or opts.autorun
+    if opts.project_root == nil then
+      opts.project_root = { "README.md", "package.json", "Cargo.toml", "pyproject.toml" }
+    end
 
     socket_path = get_socket_path(opts)
 

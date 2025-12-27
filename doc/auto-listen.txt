@@ -59,6 +59,7 @@ The plugin can be configured via a `setup()` function: >
         socket_xdg_runtime = true,    -- Use XDG cache directory
         socket_named = true,           -- Use directory name in socket file
         socket_hidden = false,          -- Create visible (non-hidden) socket file
+        project_root = false,          -- Disable project root detection
         autorun = false,              -- Disable automatic server start
     })
 <
@@ -72,15 +73,22 @@ The plugin can be configured via a `setup()` function: >
     If `true`, place the socket file in the XDG cache directory
     (`vim.fn.stdpath("cache")`). If `false`, place it in the current
     working directory.
-    When combined with `socket_named`, the socket filename uses the current
-    working directory name to prevent conflicts between different projects.
+
+*auto-listen-config-project_root*          project_root
+    Type: `string[] | false | nil` (default: `{"README.md", "package.json", "Cargo.toml", "pyproject.toml"}`)
+    Array of filenames to search for when determining project root. When not using
+    `socket_xdg_runtime`, the plugin recurses up from the current working
+    directory until it finds a directory containing one of these files.
+    Set to `false` to disable project root detection and use the current
+    directory directly. Set to a custom array to override the default list.
+    When `nil`, uses the default list.
 
 *auto-listen-config-socket_named*           socket_named
     Type: `boolean | string` (default: `false`)
     If `true`, include the current working directory name in the socket filename.
     The directory name is always based on the current working directory,
     even when `socket_xdg_runtime` is true.
-    If a string, use that literal string instead of directory name.
+    If a string, use that literal string instead of the directory name.
     Examples:
     - In directory `myproject` with `socket_named = true`: `.nvim.myproject.socket`
     - With `socket_xdg_runtime = true` and `socket_named = true`: `{cache}/.nvim.myproject.socket`
@@ -88,8 +96,8 @@ The plugin can be configured via a `setup()` function: >
 
 *auto-listen-config-socket_hidden*          socket_hidden
     Type: `boolean` (default: `true`)
-    If `true`, socket file is hidden (starts with a dot).
-    If `false`, socket file is visible.
+    If `true`, the socket file is hidden (starts with a dot).
+    If `false`, the socket file is visible.
 
 *auto-listen-config-autorun*                  autorun
     Type: `boolean` (default: `true`)
