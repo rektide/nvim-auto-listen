@@ -30,7 +30,7 @@ local function merge_with_env_vars(opts)
   local result = vim.deepcopy(opts or {})
 
   if result.socket == nil then
-    result.socket = vim.env.NVIM_AUTO_SOCKET or vim.env.NVIM_AUTO_SOCKET_PATH
+    result.socket = vim.env.NVIM_AUTO_SOCKET or vim.env.NVIM_AUTO_SOCKET_PATH or vim.env.NVIM_SOCKET_PATH
   end
 
   if result.socket_xdg_runtime == nil then

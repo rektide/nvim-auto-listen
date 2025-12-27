@@ -116,6 +116,9 @@ Environment variables take precedence over `setup()` options for any explicitly 
 *auto-listen-env-NVIM_AUTO_SOCKET_PATH*       NVIM_AUTO_SOCKET_PATH
     Set to socket path directly (same as NVIM_AUTO_SOCKET).
 
+*auto-listen-env-NVIM_SOCKET_PATH*       NVIM_SOCKET_PATH
+    Set to socket path directly (same as NVIM_AUTO_SOCKET).
+
 *auto-listen-env-NVIM_AUTO_LISTEN_XDG_RUNTIME*    NVIM_AUTO_LISTEN_XDG_RUNTIME
     Set to `true`, `1`, or `yes` to use XDG cache directory.
 
